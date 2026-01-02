@@ -32,3 +32,20 @@ ingame:
   # The default is 1. For faster action execution on high-performance PCs, you can set this to 0.5.
   # For lower-performance PCs, consider using 1.25 to 1.5.
   play_action: 1
+
+# Optional: deck definition (used by Termux assist mode).
+# If omitted, a default deck is used (same as desktop `main.py`).
+deck:
+  - archers
+  - goblin_barrel
+  - baby_dragon
+  - cannon
+  - knight
+  - minipekka
+  - musketeer
+  - witch
+
+# Optional: settings for Termux assist overlay.
+assist:
+  # Seconds between overlay updates (screenshot + detection).
+  tick_seconds: 0.5

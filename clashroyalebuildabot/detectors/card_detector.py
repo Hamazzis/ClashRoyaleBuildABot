@@ -2,7 +2,11 @@ import os
 
 import numpy as np
 from PIL import Image
-from scipy.optimize import linear_sum_assignment
+
+try:
+    from scipy.optimize import linear_sum_assignment
+except Exception:  # pragma: no cover - depends on environment
+    linear_sum_assignment = None
 
 from clashroyalebuildabot.constants import CARD_CONFIG
 from clashroyalebuildabot.constants import IMAGES_DIR
@@ -77,10 +81,51 @@ class CardDetector:
         hash_diffs = np.mean(
             np.amin(np.abs(crop_hashes - self.card_hashes), axis=1), axis=1
         ).T
-        _, idx = linear_sum_assignment(hash_diffs)
+        _, idx = self._linear_sum_assignment(hash_diffs)
         cards = [self.cards[i] for i in idx]
 
         return cards, crops
+
+    @staticmethod
+    def _linear_sum_assignment(cost_matrix: np.ndarray):
+        """
+        Assign each row to a unique column with minimum cost.
+
+        SciPy provides `linear_sum_assignment`, but on Android/Termux SciPy is
+        often unavailable. Because our hand size is tiny (5), a brute-force
+        fallback is fast enough.
+        """
+
+        if linear_sum_assignment is not None:
+            return linear_sum_assignment(cost_matrix)
+
+        # Fallback: brute force permutations (HAND_SIZE = 5, n_cards ~= 13)
+        import itertools
+
+        n_rows, n_cols = cost_matrix.shape
+        if n_cols < n_rows:
+            raise ValueError(
+                f"cost_matrix must have at least as many columns as rows "
+                f"({n_rows=} {n_cols=})"
+            )
+
+        best_cost = float("inf")
+        best_cols = None
+        col_range = range(n_cols)
+        # 13P5 = 154,440 worst-case; OK for assist mode.
+        for cols in itertools.permutations(col_range, n_rows):
+            cost = 0.0
+            for r, c in enumerate(cols):
+                cost += float(cost_matrix[r, c])
+                if cost >= best_cost:
+                    break
+            if cost < best_cost:
+                best_cost = cost
+                best_cols = cols
+
+        row_ind = np.arange(n_rows, dtype=np.int64)
+        col_ind = np.array(best_cols, dtype=np.int64)
+        return row_ind, col_ind
 
     def _detect_if_ready(self, crops):
         ready = []

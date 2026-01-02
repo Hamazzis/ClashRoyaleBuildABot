@@ -12,29 +12,36 @@ description = "A platform for creating bots to play Clash Royale"
 readme = "README.md"
 requires-python = ">= 3.9"
 dependencies = [
-    "flatbuffers>=2.0",
+    # Keep the default install lightweight (Termux/assist friendly).
     "numpy>=1.23.5,<2",
     "Pillow>=10.1.0",
-    "protobuf>=3.20.3",
-	"keyboard>=0.13.5",
-    "scipy>=1.13.1",
-    "rich>=13.7.1",
-    "loguru>=0.7.2",
     "PyYAML>=6.0.1",
+    "loguru>=0.7.2",
+]
+[project.optional-dependencies]
+assist = [
+    "termuxgui>=0.0.9",
+]
+desktop = [
+    "flatbuffers>=2.0",
+    "protobuf>=3.20.3",
+    "keyboard>=0.13.5",
+    "rich>=13.7.1",
     "pybind11>=2.12",
     "requests>=2.25.1",
     "PyQt6>=6.7.1",
     "av",
     "tqdm",
     "opencv-python==4.10.0.84",
+    "scipy>=1.13.1",
+]
+dev = [
     "pre-commit==3.5.0",
     "black==24.4.0",
     "flake8==7.0.0",
     "isort==5.13.2",
     "pylint==3.1.0",
-
 ]
-[project.optional-dependencies]
 cpu = [
     "onnxruntime>=1.18.0"
 ]
