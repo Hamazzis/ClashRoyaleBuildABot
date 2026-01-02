@@ -17,11 +17,12 @@ def setup_logger(main_window, config: dict):
         rotation="500 MB",
         level=log_level,
     )
-    logger.add(
-        main_window.log_handler_function,
-        format="{time} {level} {module}:{function}:{line} - {message}",
-        level=log_level,
-    )
+    if main_window is not None:
+        logger.add(
+            main_window.log_handler_function,
+            format="{time} {level} {module}:{function}:{line} - {message}",
+            level=log_level,
+        )
 
 
 def colorize_log(message):

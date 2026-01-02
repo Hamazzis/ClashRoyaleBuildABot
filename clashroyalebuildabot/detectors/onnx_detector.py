@@ -1,9 +1,20 @@
 import numpy as np
-import onnxruntime as ort
+
+try:
+    import onnxruntime as ort
+except Exception:  # pragma: no cover - depends on environment
+    ort = None
 
 
 class OnnxDetector:
     def __init__(self, model_path):
+        if ort is None:
+            raise RuntimeError(
+                "onnxruntime is not available. "
+                "Install it with 'pip install onnxruntime' (CPU) or "
+                "'pip install onnxruntime-gpu' (GPU), or run a detector that "
+                "does not require ONNX."
+            )
         self.model_path = model_path
 
         providers = list(

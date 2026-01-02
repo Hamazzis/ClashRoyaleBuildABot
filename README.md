@@ -44,6 +44,51 @@ Need help? Join our [Discord server](https://discord.gg/K4UfbsfcMa).
 
 ---
 
+## Termux “Assist Mode” (Overlay подсказки на Android)
+
+Этот репозиторий содержит **экспериментальный** режим “помощника” для запуска прямо на телефоне через **Termux + Termux:GUI + Termux:API**:
+
+- Показывает **overlay** поверх игры (текст: экран/эликсир/карты/подсказка “что кинуть и куда”)
+- **Не делает авто‑тапы** и не управляет игрой
+- Использует `termux-screenshot` (Termux:API) и лёгкие детекторы (без ONNX)
+
+### Быстрый старт
+
+1) Установи:
+- Termux (F-Droid)
+- Termux:API
+- Termux:GUI
+
+2) В Termux:
+
+```bash
+pkg update && pkg upgrade -y
+pkg install python termux-api git
+pip install pillow numpy termuxgui
+```
+
+3) Запуск (из клона репозитория):
+
+```bash
+python -m clashroyalebuildabot.termux_assist
+```
+
+Опционально: добавь свою колоду в `clashroyalebuildabot/config.yaml`:
+
+```yaml
+deck:
+  - archers
+  - goblin_barrel
+  - baby_dragon
+  - cannon
+  - knight
+  - minipekka
+  - musketeer
+  - witch
+```
+
+---
+
 ## Current Features ⚙️
 
 Our bot is equipped with a variety of functionalities designed for educational and research purposes. We will be updating the comprehensive list of features soon, as the bot has expanded significantly. 
